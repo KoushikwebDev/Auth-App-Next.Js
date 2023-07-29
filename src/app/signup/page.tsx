@@ -15,6 +15,8 @@ function page() {
     password: "",
   });
 
+  const [buttonMessage, setButtonMessage] = useState("Submit");
+
   const handleChange = (e: any) => {
     let value = e.target.value;
     let name = e.target.name;
@@ -24,12 +26,16 @@ function page() {
 
   const handleSubmit = async () => {
     try {
+      setButtonMessage("Submitting...");
       let response = await axios.post("/api/signup", userData);
       console.log(response);
       if (response.status === 200) {
         router.push("/login");
+        setButtonMessage("Submit");
       }
     } catch (error: any) {
+      setButtonMessage("Submit");
+
       toast.error(error.message);
       console.log("failed " + error.message);
     }
@@ -75,15 +81,13 @@ function page() {
             />
           </label>
 
-          <label htmlFor="button" className="flex flex-col">
-            <input
-              onClick={handleSubmit}
-              className="text-white px-4 py-1 bg-blue-500 cursor-pointer"
-              type="submit"
-              name="button"
-              placeholder="password"
-            />
-          </label>
+          <button
+            type="submit"
+            className="text-white px-4 py-1 w-full bg-blue-500 cursor-pointer mt-4"
+            onClick={handleSubmit}
+          >
+            {buttonMessage}
+          </button>
         </div>
         <Link
           href={"/login"}

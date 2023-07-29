@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 function page() {
+  const router = useRouter();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -19,7 +20,20 @@ function page() {
     setUserData({ ...userData, [name]: value });
   };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    try {
+      let response = await axios.post("/api/login", userData);
+
+      console.log(response);
+
+      if (response?.data?.success) {
+        router.push("profile");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log("failed " + error.message);
+    }
+  };
   return (
     <div className="bg-gray-400 flex flex-col justify-center items-center h-screen">
       <main className=" w-[330px] bg-slate-700 px-4 py-11">
